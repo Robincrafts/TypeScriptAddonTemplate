@@ -3,63 +3,537 @@
     height: 100%;
 }
 
-#ExamplePanel {
-    width: 500px;
-    height: 500px;
-    /* Using a background image already in dota */
-    background-image: url("s2r://panorama/images/loadingscreens/international_2023_ls_3/loadingscreen.vtex");
-    background-repeat: no-repeat;
-    background-position: center;
-    background-size: cover;
+/* ---- "Modify" panel: top right of the screen, under the FPS / ping readout ---- */
 
-    border-style: solid;
-    border-width: 3px;
-    border-color: rgb(0, 0, 0);
+#ModifyPanel {
+    width: 480px; /* room for the increase and decrease buttons on each row */
+    horizontal-align: right;
+    vertical-align: top;
+    margin-top: 64px; /* below the FPS / ping readout: raise or lower this to move the panel */
+    margin-right: 8px;
+    flow-children: down;
+    overflow: noclip; /* the body slides in from outside the panel */
+}
 
+/* The honey log button and the BUFF tab, side by side at the right */
+#TabBar {
+    horizontal-align: right;
+    flow-children: right;
+}
+
+/* The small icon buttons: the honey log (left of the BUFF tab) and everyone's buffs (top left) */
+.TabIconButton {
+    width: 34px;
+    height: 34px;
+    margin-right: 6px;
+    background-color: #0d1218e6;
+    border: 1px solid #3a4a5c;
+    border-radius: 3px;
+}
+
+.TabIconButton:hover,
+#ModifyPanel.HoneyLogOpen #HoneyLogButton,
+#BuffsViewRoot.Open #BuffsViewButton {
+    border: 1px solid #f0c040;
+}
+
+.TabIcon {
+    width: 20px;
+    height: 20px;
     horizontal-align: center;
+    vertical-align: center;
+    wash-color: #9fb0c2;
+}
+
+#ModifyPanel.HoneyLogOpen #HoneyLogIcon,
+#BuffsViewRoot.Open #BuffsViewIcon {
+    wash-color: #ffd75a;
+}
+
+/* The log itself, under the tabs, only while opened */
+#HoneyLog {
+    width: 300px;
+    horizontal-align: right;
+    margin-top: 4px;
+    padding: 6px 10px;
+    flow-children: down;
+    background-color: #0d1218ee;
+    border: 1px solid #3a4a5c;
+    border-radius: 3px;
+    visibility: collapse;
+}
+
+#ModifyPanel.HoneyLogOpen #HoneyLog {
+    visibility: visible;
+}
+
+#HoneyLogTitle {
+    color: #9fb0c2;
+    font-size: 13px;
+    font-weight: bold;
+    letter-spacing: 1px;
+    margin-bottom: 4px;
+}
+
+/* Needs its own width: the lines are 100% wide, and 100% of a size-to-content list is 0 (lines were invisible) */
+#HoneyLogList {
+    width: 100%;
+    flow-children: down;
+}
+
+.HoneyLine {
+    width: 100%;
+    flow-children: right;
+    margin-top: 2px;
+}
+
+.HoneyAmount {
+    width: 56px;
+    color: #ffd75a;
+    font-size: 15px;
+    font-weight: bold;
+}
+
+.HoneyReason {
+    width: fill-parent-flow(1.0);
+    color: #e3eaf2;
+    font-size: 15px;
+}
+
+.HoneyTime {
+    color: #6f8194;
+    font-size: 13px;
     vertical-align: center;
 }
 
-#ExamplePanel #BannerImage {
-    width: 200px;
-    height: 200px;
-    horizontal-align: center;
-    y: 40px;
+.HoneyEmpty {
+    width: 100%;
+    color: #6f8194;
+    font-size: 14px;
 }
 
-#ExamplePanel .ExampleTitle {
-    horizontal-align: center;
-    font-size: 30px;
-    y: 260px;
+/* ---- Everyone's buffs (G1): top left, under Dota's K/D/A readout ---- */
+#BuffsViewRoot {
+    width: 460px;
+    horizontal-align: left;
+    vertical-align: top;
+    margin-top: 110px; /* below the K/D/A and LH/DN lines: raise or lower this to move it */
+    margin-left: 10px;
+    flow-children: down;
 }
 
-#ExamplePanel .ExampleParagraph {
-    y: 320px;
-    margin-left: 30px;
-    margin-right: 30px;
+#BuffsView {
+    width: 100%;
+    margin-top: 4px;
+    padding: 6px 8px;
+    flow-children: down;
+    background-color: #0d1218ee;
+    border: 1px solid #3a4a5c;
+    border-radius: 3px;
+    visibility: collapse;
 }
 
-#ExamplePanel #CloseButton {
-    width: 100px;
-    height: 50px;
-    background-color: rgb(228, 228, 228);
-    horizontal-align: center;
+#BuffsViewRoot.Open #BuffsView {
+    visibility: visible;
+}
+
+/* Heroes on the left, the selected hero's buffed stats on the right */
+/* One fixed height for every hero (user 2026-09-30): fits the ten heroes on the left; only the right side scrolls */
+#BuffsBody {
+    width: 100%;
+    height: 420px;
+    flow-children: right;
+}
+
+#BuffsHeroes {
+    width: 190px;
+    height: 100%;
+    flow-children: down;
+}
+
+.BuffsTeamTitle {
+    font-size: 14px;
+    font-weight: bold;
+    letter-spacing: 1px;
+    margin-top: 2px;
+    margin-bottom: 2px;
+}
+
+.BuffsTeamTitle.Radiant {
+    color: #6fd36f;
+}
+
+.BuffsTeamTitle.Dire {
+    color: #e0664f;
+}
+
+.BuffsHeroGroup {
+    width: 100%;
+    flow-children: down;
+}
+
+.BuffsHeroEntry {
+    width: 100%;
+    height: 34px;
+    flow-children: right;
+    padding: 2px 4px;
+    margin-bottom: 2px;
+    background-color: #1b2530;
+    border-radius: 3px;
+    border: 1px solid transparent;
+}
+
+.BuffsHeroEntry:hover {
+    background-color: #26323f;
+}
+
+.BuffsHeroEntry.Selected {
+    background-color: #26323f;
+    border: 1px solid #f0c040;
+}
+
+.BuffsHeroEntry.IsLocalPlayer .BuffsHeroName {
+    color: #ffd75a;
+}
+
+.BuffsHeroIcon {
+    width: 28px;
+    height: 28px;
+    vertical-align: center;
+}
+
+.BuffsHeroName {
+    width: fill-parent-flow(1.0);
+    margin-left: 6px;
+    color: #e3eaf2;
+    font-size: 15px;
+    vertical-align: center;
+    text-overflow: ellipsis;
+    white-space: nowrap;
+}
+
+.BuffsHeroCount {
+    color: #ffd75a;
+    font-size: 15px;
+    font-weight: bold;
+    vertical-align: center;
+}
+
+#BuffsDetail {
+    width: fill-parent-flow(1.0);
+    height: 100%;
+    margin-left: 8px;
+    flow-children: down;
+}
+
+#BuffsDetailTitle {
+    color: #e3eaf2;
+    font-size: 15px;
+    font-weight: bold;
+    letter-spacing: 1px;
+    margin-top: 2px;
+    margin-bottom: 4px;
+}
+
+/* A hero with many buffs scrolls instead of running off the screen */
+#BuffsDetailList {
+    width: 100%;
+    height: fill-parent-flow(1.0);
+    padding-right: 12px; /* room for the scrollbar, so it does not cover the numbers */
+    flow-children: down;
+    overflow: squish scroll;
+}
+
+.BuffLine {
+    width: 100%;
+    height: 30px;
+    flow-children: right;
+    margin-bottom: 2px;
+}
+
+.BuffLineIcon {
+    width: 26px;
+    height: 26px;
+    vertical-align: center;
+    border-radius: 2px;
+}
+
+.BuffLineStat {
+    width: fill-parent-flow(1.0);
+    margin-left: 6px;
+    color: #c9d4de;
+    font-size: 15px;
+    vertical-align: center;
+    text-overflow: ellipsis;
+    white-space: nowrap;
+}
+
+.BuffLineValue {
+    margin-left: 6px;
+    color: #ffffff;
+    font-size: 16px;
+    font-weight: bold;
+    vertical-align: center;
+}
+
+.BuffLineMax {
+    margin-left: 5px;
+    padding: 0px 3px;
+    border-radius: 2px;
+    background-color: #f5b301;
+    color: #1b1300;
+    font-size: 11px;
+    font-weight: bold;
+    vertical-align: center;
+}
+
+.BuffsEmpty {
+    color: #6f8194;
+    font-size: 15px;
+}
+
+#ModifyTab {
+    width: 172px;
+    height: 34px;
+    padding: 0px 10px;
+    background-color: #0d1218e6;
+    border: 1px solid #3a4a5c;
+    border-radius: 3px;
+}
+
+#TabRow {
+    width: 100%;
+    height: 100%;
+    flow-children: right;
+}
+
+/* 2px bar along the bottom of the tab: how close the next buff is */
+#TabProgressTrack {
+    width: 100%;
+    height: 2px;
     vertical-align: bottom;
-    y: -30px;
+    margin-bottom: 3px;
+    border-radius: 1px;
+    background-color: #ffffff1a;
 }
 
-#ExamplePanel #CloseButton Label {
-    horizontal-align: center;
+#TabProgressFill {
+    width: 0%;
+    height: 100%;
+    border-radius: 1px;
+    background-color: #f0c040;
+    transition-property: width;
+    transition-duration: 0.3s;
+}
+
+#ModifyTab:hover {
+    border: 1px solid #8aa4c0;
+}
+
+#TabText {
+    width: fill-parent-flow(1.0);
+    color: #9fb0c2;
+    font-size: 17px;
+    font-weight: bold;
+    letter-spacing: 1px;
     vertical-align: center;
-    color: black;
 }
 
-#ExamplePanel #CloseButton:hover {
-    background-color: rgb(0, 135, 245);
+#TabCount {
+    min-width: 26px;
+    color: #9fb0c2;
+    font-size: 17px;
+    font-weight: bold;
+    text-align: right;
+    vertical-align: center;
 }
 
-#ExamplePanel #CloseButton:hover Label {
-    color: white;
+/* At least one upgrade is affordable */
+#ModifyPanel.HasCredits #ModifyTab {
+    border: 1px solid #f0c040;
+    background-color: #2a2409e6;
 }
 
+#ModifyPanel.HasCredits #TabText,
+#ModifyPanel.HasCredits #TabCount {
+    color: #ffd75a;
+}
+
+/* The list slides in from the right edge and back out */
+#ModifyBody {
+    width: 100%;
+    flow-children: down;
+    margin-top: 4px;
+    padding: 6px;
+    background-color: #0d1218ee;
+    border: 1px solid #3a4a5c;
+    border-radius: 3px;
+    transform: translateX(440px);
+    opacity: 0;
+    transition-property: transform, opacity;
+    transition-duration: 0.22s;
+    transition-timing-function: ease-out;
+}
+
+#ModifyPanel.Open #ModifyBody {
+    transform: translateX(0px);
+    opacity: 1;
+}
+
+#ModifyList {
+    width: 100%;
+    flow-children: down;
+}
+
+/* ---- One boostable ---- */
+
+.ModifyRow {
+    width: 100%;
+    height: 50px;
+    margin-bottom: 3px;
+}
+
+#RowBody {
+    width: 100%;
+    height: 100%;
+    flow-children: right;
+    padding: 0px 6px 0px 0px;
+    background-color: #18222d;
+    border-radius: 3px;
+}
+
+/* Colored line on the left: the rarity of the row */
+#RarityBar {
+    width: 6px;
+    height: 100%;
+    margin-right: 8px;
+    background-color: #8a8f98;
+    border-radius: 3px;
+}
+
+.ModifyRow.Rarity_common #RarityBar {
+    background-color: #8a8f98;
+}
+
+.ModifyRow.Rarity_rare #RarityBar {
+    background-color: #3f8cff;
+}
+
+.ModifyRow.Rarity_epic #RarityBar {
+    background-color: #a35cff;
+}
+
+.ModifyRow.Rarity_legendary #RarityBar {
+    background-color: #f5b301;
+}
+
+#RowIcon {
+    width: 38px;
+    height: 38px;
+    vertical-align: center;
+    border-radius: 3px;
+}
+
+#RowInnateIcon {
+    width: 38px;
+    height: 38px;
+    vertical-align: center;
+    visibility: collapse;
+}
+
+.ModifyRow.Innate #RowIcon {
+    visibility: collapse;
+}
+
+.ModifyRow.Innate #RowInnateIcon {
+    visibility: visible;
+}
+
+#RowStat {
+    width: fill-parent-flow(1.0);
+    color: #e3eaf2;
+    font-size: 16px;
+    vertical-align: center;
+    margin-left: 10px;
+    text-overflow: ellipsis;
+    white-space: nowrap;
+}
+
+/* The number now */
+#RowValue {
+    width: 56px;
+    color: #e3eaf2;
+    font-size: 15px;
+    text-align: right;
+    vertical-align: center;
+    margin-right: 6px;
+}
+
+/* Increase / decrease: each shows the number one click would give */
+.RowDirection {
+    width: 66px;
+    height: 36px;
+    margin-left: 4px;
+    vertical-align: center;
+    background-color: #223244;
+    border-radius: 3px;
+}
+
+.RowDirection:hover {
+    background-color: #2a4a70;
+}
+
+.RowDirection Label {
+    width: 100%;
+    font-size: 14px;
+    text-align: center;
+    vertical-align: center;
+}
+
+#UpText {
+    color: #7fd67f;
+}
+
+#DownText {
+    color: #e8965a;
+}
+
+/* This direction is at its limit */
+.RowDirection.Disabled {
+    opacity: 0.3;
+}
+
+.RowDirection.Disabled:hover {
+    background-color: #223244;
+}
+
+/* No upgrade affordable: the whole row is dimmed */
+.ModifyRow.Disabled {
+    opacity: 0.35;
+}
+
+/* ---- Info below the list, small font ---- */
+
+/* Under the list: the exact change on the left, "Next buff: 73 / 125" on the right, the same size */
+#InfoRow {
+    width: 100%;
+    flow-children: right;
+    margin-top: 6px;
+}
+
+#InfoDetail {
+    width: fill-parent-flow(1.0);
+    color: #b7c4d1;
+    font-size: 15px;
+    min-height: 18px;
+    vertical-align: bottom;
+}
+
+#NextBuff {
+    margin-left: 10px;
+    color: #ffd75a;
+    font-size: 14px;
+    font-weight: bold;
+    vertical-align: bottom;
+}
 

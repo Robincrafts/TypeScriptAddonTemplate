@@ -1,0 +1,18 @@
+"AddonInfo"
+{
+	"IsPlayable"		"1"
+	"maps"				"all_pick single_draft all_random"
+	"TeamCount"			"2"
+	"all_pick"
+	{
+		"MaxPlayers"	"10"
+	}
+	"single_draft"
+	{
+		"MaxPlayers"	"10"
+	}
+	"all_random"
+	{
+		"MaxPlayers"	"10"
+	}
+}

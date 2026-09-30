@@ -56,7 +56,11 @@ export const registerAbility = (name?: string) => (ability: new () => CDOTA_Abil
     };
 };
 
-export const registerModifier = (name?: string) => (modifier: new () => CDOTA_Modifier_Lua, context: ClassDecoratorContext) => {
+/**
+ * `file` is the modifier's script path relative to scripts/vscripts (without .lua). Outside tools mode Dota removes
+ * the `debug` library, so the path cannot be found by itself there and must be given.
+ */
+export const registerModifier = (name?: string, file?: string) => (modifier: new () => CDOTA_Modifier_Lua, context: ClassDecoratorContext) => {
     if (name !== undefined) {
         // @ts-ignore
         modifier.name = name;
@@ -66,8 +70,8 @@ export const registerModifier = (name?: string) => (modifier: new () => CDOTA_Mo
         throw "Unable to determine name of this modifier class!";
     }
 
-    const [env, source] = getFileScope();
-    const [fileName] = string.gsub(source, ".*scripts[\\/]vscripts[\\/]", "");
+    const [env, source] = getFileScope(modifier);
+    const [fileName] = file !== undefined ? [file] : string.gsub(source, ".*scripts[\\/]vscripts[\\/]", "");
 
     env[name] = {};
 
@@ -118,7 +122,24 @@ function clearTable(table: object) {
     }
 }
 
-function getFileScope(): [any, string] {
+/** The first function defined on a class: it was created in the class's file, so it carries that file's scope. */
+function functionOf(table: any): ((...args: any[]) => any) | undefined {
+    const prototype = table?.prototype;
+    if (prototype === undefined) return undefined;
+    for (const key in prototype) {
+        if (type(prototype[key]) === "function") return prototype[key];
+    }
+    return undefined;
+}
+
+function getFileScope(owner?: any): [any, string] {
+    // Outside tools mode there is no debug library: take the scope of a function the file defined
+    if ((_G as any).debug === undefined) {
+        const f = functionOf(owner);
+        if (f === undefined) throw "Cannot find the file scope without the debug library";
+        return [getfenv(f), ""];
+    }
+
     let level = 1;
     while (true) {
         const info = debug.getinfo(level, "S");

@@ -1,0 +1,419 @@
+/* ---- Game setup screen: settings on the left, teams and start on the right ---- */
+
+/* Waits off screen on the left while Valve's loading screen shows, then slides in once every player has loaded (the
+   script adds .SlidIn to the overlay when the game reaches custom game setup). The overlay IS the .SetupRoot panel
+   (BLoadLayout gives the layout's root class to the panel it loads into), so the rule is .SetupRoot.SlidIn */
+/* A narrow strip of tabs until a tab is clicked, then full size (.Expanded, user 2026-09-30) */
+.SetupRoot {
+    width: 310px;
+    height: 100%;
+    background-color: #0d1218ee;
+    border-right: 2px solid #3a4a5c;
+    transform: translateX(-1100px);
+    opacity: 0;
+    transition-property: transform, opacity;
+    transition-duration: 0.45s;
+    transition-timing-function: ease-out;
+}
+
+.SetupRoot.SlidIn {
+    transform: translateX(0px);
+    opacity: 1;
+}
+
+.SetupRoot.Expanded {
+    width: 1080px;
+}
+
+#SetupContent {
+    width: 100%;
+    height: 100%;
+    flow-children: down;
+    padding: 24px 22px;
+}
+
+/* ---- Settings (left) ---- */
+
+
+#SetupTitle {
+    color: #ffd75a;
+    font-size: 30px;
+    font-weight: bold;
+    letter-spacing: 2px;
+}
+
+#SetupHelp {
+    color: #7f92a6;
+    font-size: 15px;
+    margin-top: 2px;
+    margin-bottom: 14px;
+}
+
+#SetupBody {
+    width: 100%;
+    height: fill-parent-flow(1.0);
+    flow-children: right;
+}
+
+#TabColumn {
+    width: 220px;
+    height: 100%;
+    flow-children: down;
+}
+
+.SetupRoot.Expanded #TabColumn {
+    margin-right: 24px;
+}
+
+#GroupTabs {
+    width: 100%;
+    flow-children: down;
+}
+
+#TabSpacer {
+    width: 100%;
+    height: fill-parent-flow(1.0);
+}
+
+.GroupTab {
+    width: 100%;
+    height: 44px;
+    padding: 0px 16px;
+    margin-bottom: 8px;
+    background-color: #1c2a38;
+    border-radius: 3px;
+}
+
+.GroupTab:hover {
+    background-color: #2a4a70;
+}
+
+.GroupTab Label {
+    vertical-align: center;
+    color: #9fb0c2;
+    font-size: 18px;
+}
+
+.GroupTab.Selected {
+    background-color: #b8860b;
+}
+
+.GroupTab.Selected Label {
+    color: #ffffff;
+}
+
+
+/* Only while a tab is open */
+#SettingsList {
+    visibility: collapse;
+    width: fill-parent-flow(1.0);
+    height: 100%;
+    flow-children: down;
+    padding: 12px 20px;
+    background-color: #070b10;
+    border: 1px solid #2a3644;
+    border-radius: 10px;
+    overflow: squish scroll;
+}
+
+.SetupRoot.Expanded #SettingsList {
+    visibility: visible;
+}
+
+.SectionHeader {
+    width: 100%;
+    flow-children: right;
+    margin-top: 16px;
+    margin-bottom: 6px;
+}
+
+.SectionHeader.First {
+    margin-top: 2px;
+}
+
+#SectionTitle {
+    color: #ffd75a;
+    font-size: 14px;
+    font-weight: bold;
+    letter-spacing: 1px;
+    text-transform: uppercase;
+    vertical-align: center;
+}
+
+.SectionLine {
+    width: fill-parent-flow(1.0);
+    height: 1px;
+    margin-left: 12px;
+    vertical-align: center;
+    background-color: #2a3644;
+}
+
+.SettingRow {
+    width: 100%;
+    flow-children: down;
+    margin-bottom: 4px;
+}
+
+.RowMain {
+    width: 100%;
+    min-height: 48px;
+    flow-children: right;
+}
+
+/* The explanation of an (i) icon: one floating box on top of the menu, placed next to the icon by the script */
+#SettingTooltip {
+    width: 340px;
+    padding: 8px 12px;
+    color: #dbe4ee;
+    font-size: 15px;
+    background-color: #131c26f5;
+    border: 1px solid #ffd75a;
+    border-radius: 4px;
+    box-shadow: #000000cc 0px 2px 8px 0px;
+    visibility: collapse;
+}
+
+#SettingTooltip.Shown {
+    visibility: visible;
+}
+
+.RowName {
+    width: fill-parent-flow(1.0);
+    flow-children: right;
+    vertical-align: center;
+    margin-right: 10px;
+}
+
+#RowInfo {
+    width: 20px;
+    height: 20px;
+    margin-left: 8px;
+    vertical-align: center;
+    text-align: center;
+    color: #9fb0c2;
+    font-size: 13px;
+    font-weight: bold;
+    border: 1px solid #5f7185;
+    border-radius: 10px;
+    visibility: collapse;
+}
+
+#RowInfo.HasHelp {
+    visibility: visible;
+}
+
+#RowInfo:hover {
+    color: #ffd75a;
+    border: 1px solid #ffd75a;
+}
+
+#RowLabel {
+    color: #dbe4ee;
+    font-size: 19px;
+    vertical-align: center;
+}
+
+#RowInput {
+    width: 130px;
+    height: 40px;
+    vertical-align: center;
+    padding: 0px 10px;
+    font-size: 20px;
+    font-weight: bold;
+    color: #7fd67f;
+    text-align: center;
+    padding-top: 6px;
+    background-color: #05080c;
+    border: 1px solid #3a4a5c;
+}
+
+#RowInput:focus {
+    border: 1px solid #ffd75a;
+}
+
+#RowRange {
+    width: 130px;
+    vertical-align: center;
+    margin-left: 10px;
+    color: #5f7185;
+    font-size: 14px;
+}
+
+#ToggleButton {
+    width: 130px;
+    height: 40px;
+    vertical-align: center;
+    background-color: #1c2a38;
+    border-radius: 3px;
+}
+
+#ToggleButton:hover {
+    background-color: #2a4a70;
+}
+
+#ToggleText {
+    horizontal-align: center;
+    vertical-align: center;
+    color: #9fb0c2;
+    font-size: 18px;
+    font-weight: bold;
+}
+
+.SettingRow.On #ToggleButton {
+    background-color: #24593a;
+}
+
+.SettingRow.On #ToggleText {
+    color: #8fe6a8;
+}
+
+#ResetButton {
+    width: 100%;
+    height: 44px;
+    margin-top: 10px;
+    background-color: #1c2a38;
+    border-radius: 3px;
+}
+
+#ResetButton:hover {
+    background-color: #2a4a70;
+}
+
+#ResetButton Label {
+    horizontal-align: center;
+    vertical-align: center;
+    color: #dbe4ee;
+    font-size: 16px;
+}
+
+.MainTitle {
+    margin-top: 12px;
+    color: #9fb0c2;
+    font-size: 22px;
+    font-weight: bold;
+    letter-spacing: 1px;
+    margin-bottom: 8px;
+}
+
+/* ---- Presets ---- */
+
+#PresetSave {
+    width: 100%;
+    flow-children: right;
+}
+
+#PresetNameEntry {
+    width: fill-parent-flow(1.0);
+    height: 36px;
+    margin-top: 6px;
+    font-size: 17px;
+    color: #e3eaf2;
+    background-color: #05080c;
+    border: 1px solid #3a4a5c;
+    padding: 0px 8px;
+}
+
+#SaveButton {
+    width: 90px;
+    margin-left: 8px;
+}
+
+#PresetList {
+    width: 100%;
+    min-height: 90px;
+    max-height: 190px;
+    flow-children: down;
+    margin: 10px 0px;
+    overflow: squish scroll;
+}
+
+.PresetRow {
+    width: 100%;
+    height: 34px;
+    flow-children: right;
+    margin-bottom: 3px;
+}
+
+#PresetNameButton {
+    width: fill-parent-flow(1.0);
+    height: 100%;
+    background-color: #131c26;
+    border-radius: 3px;
+    padding: 0px 8px;
+}
+
+#PresetNameButton:hover {
+    background-color: #24384d;
+}
+
+#PresetName {
+    color: #dbe4ee;
+    font-size: 17px;
+    vertical-align: center;
+}
+
+#LoadButton,
+#DeleteButton {
+    width: 70px;
+    height: 100%;
+    margin-left: 4px;
+    background-color: #1c2a38;
+    border-radius: 3px;
+}
+
+#LoadButton:hover { background-color: #24593a; }
+#DeleteButton:hover { background-color: #6a2a2a; }
+
+#LoadButton Label,
+#DeleteButton Label {
+    horizontal-align: center;
+    vertical-align: center;
+    color: #dbe4ee;
+    font-size: 15px;
+}
+
+#StatusLabel {
+    width: 100%;
+    min-height: 40px;
+    color: #b7c4d1;
+    font-size: 15px;
+    margin-bottom: 8px;
+}
+
+#StartButton {
+    width: 100%;
+    height: 68px;
+    background-color: #b8860b;
+    border-radius: 4px;
+}
+
+#StartButton:hover {
+    background-color: #e0a419;
+}
+
+#StartButton Label {
+    horizontal-align: center;
+    vertical-align: center;
+    color: #ffffff;
+    font-size: 28px;
+    font-weight: bold;
+    letter-spacing: 2px;
+}
+
+#HostNote {
+    width: 100%;
+    color: #e8965a;
+    font-size: 15px;
+    margin-top: 8px;
+}
+
+/* Players who are not the host can look but not change anything */
+.ReadOnly .SettingRow {
+    opacity: 0.6;
+}
+
+.ReadOnly #StartButton,
+.ReadOnly #SaveButton,
+.ReadOnly #ResetButton {
+    opacity: 0.35;
+}

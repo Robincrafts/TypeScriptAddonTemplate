@@ -1,3 +1,6 @@
+-- Outside tools mode Dota removes the debug library, so fall back to returning the plain error message
+local TIMERS_TRACEBACK = (debug ~= nil and debug.traceback) or function(message) return tostring(message) end
+
 TIMERS_VERSION = "1.07"
 
 --[[
@@ -156,7 +159,7 @@ function Timers:Think()
 	local nextTickCallbacks = table.merge({}, Timers.nextTickCallbacks)
 	Timers.nextTickCallbacks = {}
 	for _, cb in ipairs(nextTickCallbacks) do
-		local status, result = xpcall(cb, debug.traceback)
+		local status, result = xpcall(cb, TIMERS_TRACEBACK)
 		if not status then
 			Timers:HandleEventError(result)
 		end
@@ -189,9 +192,9 @@ function Timers:ExecuteTimers(timerList, now)
 		-- Run the callback
 		local status, timerResult
 		if currentTimer.context then
-			status, timerResult = xpcall(function() return currentTimer.callback(currentTimer.context, currentTimer) end, debug.traceback)
+			status, timerResult = xpcall(function() return currentTimer.callback(currentTimer.context, currentTimer) end, TIMERS_TRACEBACK)
 		else
-			status, timerResult = xpcall(function() return currentTimer.callback(currentTimer) end, debug.traceback)
+			status, timerResult = xpcall(function() return currentTimer.callback(currentTimer) end, TIMERS_TRACEBACK)
 		end
 
 		Timers.runningTimer = nil

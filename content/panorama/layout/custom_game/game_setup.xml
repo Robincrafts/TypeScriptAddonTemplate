@@ -1,0 +1,94 @@
+<root>
+    <scripts>
+        <include src="file://{resources}/scripts/custom_game/game_setup.js" />
+    </scripts>
+
+    <styles>
+        <include src="s2r://panorama/styles/dotastyles.css" />
+        <include src="file://{resources}/styles/custom_game/game_setup.css" />
+    </styles>
+
+    <snippets>
+        <!-- A tab that picks which group of settings is shown -->
+        <snippet name="GroupTab">
+            <Button class="GroupTab"><Label id="TabText" /></Button>
+        </snippet>
+
+        <!-- A number setting: label, input field, allowed range -->
+        <snippet name="NumberRow">
+            <Panel class="SettingRow">
+                <Panel class="RowMain">
+                    <Panel class="RowName">
+                        <Label id="RowLabel" />
+                        <Label id="RowInfo" text="i" hittest="true" />
+                    </Panel>
+                    <TextEntry id="RowInput" maxchars="9" />
+                    <Label id="RowRange" />
+                </Panel>
+            </Panel>
+        </snippet>
+
+        <!-- A divider inside a tab: a heading with a line after it -->
+        <snippet name="SectionHeader">
+            <Panel class="SectionHeader">
+                <Label id="SectionTitle" />
+                <Panel class="SectionLine" />
+            </Panel>
+        </snippet>
+
+        <!-- An on / off setting -->
+        <snippet name="ToggleRow">
+            <Panel class="SettingRow">
+                <Panel class="RowMain">
+                    <Panel class="RowName">
+                        <Label id="RowLabel" />
+                        <Label id="RowInfo" text="i" hittest="true" />
+                    </Panel>
+                    <Button id="ToggleButton"><Label id="ToggleText" /></Button>
+                    <!-- Empty, so the button lines up with the number fields above and below -->
+                    <Label id="RowRange" />
+                </Panel>
+            </Panel>
+        </snippet>
+
+        <!-- One saved preset -->
+        <snippet name="PresetRow">
+            <Panel class="PresetRow">
+                <Button id="PresetNameButton"><Label id="PresetName" /></Button>
+                <Button id="LoadButton"><Label text="Load" /></Button>
+                <Button id="DeleteButton"><Label text="Delete" /></Button>
+            </Panel>
+        </snippet>
+    </snippets>
+
+    <!-- An overlay on the left side; Valve's own team picker stays visible next to it -->
+    <Panel class="SetupRoot">
+        <!-- Everything stacks inside this panel; the root itself does not flow, so the tooltip can float on top -->
+        <Panel id="SetupContent">
+        <Label id="SetupTitle" text="GAME SETTINGS" />
+        <Label id="SetupHelp" text="Click a tab to open its settings, type a value and press Enter." />
+
+        <Panel id="SetupBody">
+            <!-- Tabs down the left, Reset at the bottom -->
+            <Panel id="TabColumn">
+                <Panel id="GroupTabs" />
+                <Panel id="TabSpacer" />
+                <Button id="ResetButton"><Label text="Reset" /></Button>
+            </Panel>
+
+            <!-- The settings of the selected tab -->
+            <Panel id="SettingsList" />
+        </Panel>
+
+        <Label id="PresetsTitle" class="MainTitle" text="PRESETS" />
+        <Panel id="PresetSave" visible="false">
+            <TextEntry id="PresetNameEntry" maxchars="24" placeholder="Preset name" />
+            <Button id="SaveButton"><Label text="Save" /></Button>
+        </Panel>
+        <Panel id="PresetList" visible="false" />
+
+        <Label id="StatusLabel" text="" />
+        <Button id="StartButton" visible="false"><Label text="START GAME" /></Button>
+    </Panel>
+    </Panel>
+</root>

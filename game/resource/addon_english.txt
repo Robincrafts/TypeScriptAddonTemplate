@@ -1,0 +1,15 @@
+"lang"
+{
+	"Language"	"English"
+	"Tokens"
+	{
+		"addon_game_name"	"Honey, I Buffed the Heroes"
+		// Lobby map choices: each map is a hero pick mode (pick_modes.ts)
+		"all_pick"	"All Pick"
+		"single_draft"	"Single Draft"
+		"all_random"	"All Random"
+		// Dota's "Mark for Sell" sells right away in this game (shop.ts), from anywhere
+		"DOTA_InventoryMenu_MarkForSell"	"Sell"
+		"DOTA_InventoryMenu_MarkForSell_Tooltip"	"Sells the item right away, wherever you are. Full price within 10 seconds of buying it, half price after."
+	}
+}

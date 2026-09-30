@@ -1,5 +1,5 @@
 {
-    "name": "",
+    "name": "dota_boosted",
     "private": true,
     "scripts": {
         "postinstall": "node scripts/install.js",
@@ -9,7 +9,9 @@
         "build:vscripts": "tstl --project src/vscripts/tsconfig.json",
         "dev": "run-p dev:*",
         "dev:panorama": "tsc --project src/panorama/tsconfig.json --watch",
-        "dev:vscripts": "tstl --project src/vscripts/tsconfig.json --watch"
+        "dev:vscripts": "tstl --project src/vscripts/tsconfig.json --watch",
+        "compile-ui": "node scripts/compile-ui.js",
+        "publish-prep": "npm run build && npm run compile-ui"
     },
     "devDependencies": {
         "@moddota/dota-lua-types": "^4.34.1",

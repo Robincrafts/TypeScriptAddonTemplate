@@ -2,6 +2,8 @@
     <scripts>
         <!-- Included JS script files go here -->
         <include src="file://{resources}/scripts/custom_game/hud.js" />
+        <!-- Everyone's buffs view (G1); uses helpers from hud.js, so it must come after it -->
+        <include src="file://{resources}/scripts/custom_game/buffs_view.js" />
     </scripts>
 
     <styles>
@@ -11,21 +13,87 @@
     </styles>
 
     <snippets>
-        <!-- Snippets go here -->
+        <!-- One random boostable: rarity line, ability icon, stat name, its value now, and an increase and a decrease
+             button that each show the number a click would give -->
+        <snippet name="ModifyRow">
+            <Panel class="ModifyRow">
+                <Panel id="RowBody">
+                    <Panel id="RarityBar" />
+                    <DOTAAbilityImage id="RowIcon" />
+                    <!-- Innate skills show Dota's innate icon instead -->
+                    <Image id="RowInnateIcon" src="s2r://panorama/images/hud/facets/innate_icon_large_png.vtex" scaling="stretch-to-fit-preserve-aspect" />
+                    <Label id="RowStat" />
+                    <Label id="RowValue" />
+                    <Button id="UpButton" class="RowDirection">
+                        <Label id="UpText" />
+                    </Button>
+                    <Button id="DownButton" class="RowDirection">
+                        <Label id="DownText" />
+                    </Button>
+                </Panel>
+            </Panel>
+        </snippet>
     </snippets>
 
     <Panel hittest="false" class="MainHud">
-        <Panel id="ExamplePanel">
+        <Panel id="ModifyPanel">
+            <!-- Always visible: the honey log button (tools mode), and the BUFF tab (how many upgrades you can afford;
+                 click to slide the list in or out) -->
+            <Panel id="TabBar">
+                <Button id="HoneyLogButton" class="TabIconButton" onactivate="ToggleHoneyLog()">
+                    <Image id="HoneyLogIcon" class="TabIcon" src="s2r://panorama/images/control_icons/history_png.vtex" />
+                </Button>
+                <Button id="ModifyTab" onactivate="ToggleModifyPanel()">
+                    <Panel id="TabRow">
+                        <Label id="TabText" text="BUFF" />
+                        <Label id="TabCount" text="0" />
+                    </Panel>
+                    <!-- Progress toward the next buff, along the bottom edge of the tab -->
+                    <Panel id="TabProgressTrack">
+                        <Panel id="TabProgressFill" />
+                    </Panel>
+                </Button>
+            </Panel>
 
-            <Image id="BannerImage" src="file://{resources}/images/custom_game/tstl.png" />
+            <!-- Honey log: the last few honey gains as lines, opened with the button next to the BUFF tab -->
+            <Panel id="HoneyLog">
+                <Label id="HoneyLogTitle" text="RECENT HONEY" />
+                <Panel id="HoneyLogList" />
+            </Panel>
 
-            <Label class="ExampleTitle" text="TypeScript Dota Addon template" />
+            <!-- Slides in from the right edge, only while there is a point to spend -->
+            <Panel id="ModifyBody">
+                <Panel id="ModifyList" />
+                <!-- One line: the hovered button's exact change on the left, honey toward the next buff on the right -->
+                <Panel id="InfoRow">
+                    <Label id="InfoDetail" text="" />
+                    <Label id="NextBuff" text="" />
+                </Panel>
+            </Panel>
+        </Panel>
 
-            <Label class="ExampleParagraph" text="This is an example text box! Close it to apply the 'panic' modifier to your hero. You can remove this panel in content/panorama/layout/custom_game/hud.xml" />
-
-            <Button id="CloseButton" onactivate="OnCloseButtonClicked()">
-                <Label text="Close" />
+        <!-- Everyone's buffs (G1): top left, under Dota's K/D/A readout. The button opens the view below it. -->
+        <Panel id="BuffsViewRoot" hittest="false">
+            <Button id="BuffsViewButton" class="TabIconButton" onactivate="ToggleBuffsView()">
+                <Image id="BuffsViewIcon" class="TabIcon" src="s2r://panorama/images/control_icons/24px/hero.vsvg" />
             </Button>
+            <!-- Everyone's buffs (G1): every hero on the left, the selected hero's buffed stats on the right -->
+            <!-- hittest: the whole box takes clicks, so a click on its empty space stays inside (does not close it or
+                 reach the game world); only the wrapper around it lets clicks through -->
+            <Panel id="BuffsView" hittest="true">
+                <Panel id="BuffsBody">
+                    <Panel id="BuffsHeroes">
+                        <Label class="BuffsTeamTitle Radiant" text="RADIANT" />
+                        <Panel id="RadiantHeroes" class="BuffsHeroGroup" />
+                        <Label class="BuffsTeamTitle Dire" text="DIRE" />
+                        <Panel id="DireHeroes" class="BuffsHeroGroup" />
+                    </Panel>
+                    <Panel id="BuffsDetail">
+                        <Label id="BuffsDetailTitle" text="" />
+                        <Panel id="BuffsDetailList" />
+                    </Panel>
+                </Panel>
+            </Panel>
         </Panel>
     </Panel>
 </root>

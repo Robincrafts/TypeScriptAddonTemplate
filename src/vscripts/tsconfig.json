@@ -6,12 +6,12 @@
         "lib": ["esnext"],
         "types": ["@moddota/dota-lua-types/normalized"],
         "plugins": [{ "transform": "@moddota/dota-lua-types/transformer" }],
-        "moduleResolution": "node",
+        "moduleResolution": "bundler",
         "strict": true
     },
     "tstl": {
         "luaTarget": "JIT",
-        "sourceMapTraceback": true
+        "sourceMapTraceback": false
     },
     "include": ["**/*.ts", "../common/**/*.ts"]
 }
